@@ -5,7 +5,13 @@
   "cleanUrls": true,
   "headers": [
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/config.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, max-age=0" }
+      ]
+    },
+    {
+      "source": "/assets/urso.png",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
