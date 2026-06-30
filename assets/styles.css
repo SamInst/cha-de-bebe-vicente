@@ -388,6 +388,90 @@ body {
   text-align: center;
 }
 
+/* ---------- Lista de confirmados ---------- */
+.count-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin: 4px auto 22px;
+  width: fit-content;
+  padding: 10px 22px;
+  background: rgba(255, 252, 244, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 999px;
+  border: 1px solid rgba(193, 154, 107, 0.5);
+  font-weight: 700;
+  color: var(--cocoa);
+  font-size: 0.98rem;
+}
+.count-pill .bear-mini { font-size: 1.2rem; }
+
+.guest-list { display: flex; flex-direction: column; gap: 12px; }
+
+.guest {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(255, 250, 240, 0.44);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(193, 154, 107, 0.4);
+  box-shadow: 0 14px 32px -26px rgba(110, 82, 56, 0.5);
+  animation: guestIn 0.5s ease both;
+  animation-delay: calc(var(--i) * 0.06s);
+}
+@keyframes guestIn {
+  from { opacity: 0; transform: translateX(-14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.guest-num {
+  flex: none;
+  width: 34px; height: 34px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, var(--blue-soft), #a9cde9);
+  color: #34536a;
+  font-weight: 700;
+  font-size: 0.82rem;
+  border-radius: 50%;
+  border: 1px solid rgba(91, 126, 152, 0.3);
+}
+.guest-name {
+  flex: 1;
+  font-family: "Fraunces", serif;
+  font-weight: 500;
+  font-size: 1.12rem;
+  color: var(--cocoa-deep);
+  text-transform: capitalize;
+  line-height: 1.2;
+}
+.guest-when {
+  flex: none;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--caramel);
+  white-space: nowrap;
+}
+
+.list-state {
+  text-align: center;
+  color: #7a6448;
+  font-size: 0.96rem;
+  line-height: 1.6;
+  padding: 14px 6px;
+}
+
+@media (max-width: 480px) {
+  .guest { padding: 14px; gap: 10px; }
+  .guest-name { font-size: 1.02rem; }
+  .guest-when { font-size: 0.7rem; }
+}
+
 /* ---------- Corações que sobem ---------- */
 .hearts { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
 .hearts span {
