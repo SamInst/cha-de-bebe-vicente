@@ -17,15 +17,12 @@ const countText = document.getElementById("count-text");
 
 function formatarData(iso) {
   if (!iso) return "";
-  const d = new Date(iso);
-  if (isNaN(d)) return "";
-  return d.toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-  }) + " · " + d.toLocaleTimeString("pt-BR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  // Extrai direto da string (evita o parser de datas do Safari iOS, que
+  // quebra com microssegundos como ".701814"). A hora já vem no fuso correto.
+  const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (!m) return "";
+  const [, , mo, d, h, mi] = m;
+  return `${d}/${mo} · ${h}:${mi}`;
 }
 
 function render(lista) {
