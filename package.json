@@ -1,0 +1,9 @@
+{
+  "name": "cha-de-bebe-vicente",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Confirmacao de presenca do Cha de Bebe do Vicente",
+  "scripts": {
+    "build": "node build.js"
+  }
+}

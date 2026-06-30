@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chá de Bebê do Vicente · Confirme sua presença</title>
+  <meta name="description" content="Venha celebrar a chegada do nosso pequeno Vicente. Confirme sua presença com muito carinho. 🧸🤍" />
+
+  <!-- Open Graph (preview bonito ao compartilhar no WhatsApp) -->
+  <meta property="og:title" content="Chá de Bebê do Vicente 🧸" />
+  <meta property="og:description" content="Será uma alegria contar com a sua presença. Confirme aqui!" />
+  <meta property="og:image" content="./assets/urso.png" />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Parisienne&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <!-- Céu de berçário -->
+  <div class="sky" aria-hidden="true">
+    <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
+    <span class="star s4"></span><span class="star s5"></span><span class="star s6"></span>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+    <div class="cloud c5"></div>
+    <div class="cloud c6"></div>
+    <div class="cloud c7"></div>
+    <div class="cloud c8"></div>
+    <div class="cloud c9"></div>
+    <div class="cloud c10"></div>
+  </div>
+
+  <main class="card" id="card">
+
+    <!-- Ilustração do ursinho -->
+    <div class="bear-illo reveal" style="--d:0">
+      <img src="./assets/urso.png" alt="Ursinho com balões e luazinha sobre uma nuvem" loading="eager" />
+    </div>
+
+    <!-- Cabeçalho do convite (todo em texto) -->
+    <header class="hero reveal" style="--d:1">
+      <p class="eyebrow">Com muito carinho, convidamos você para o</p>
+      <h1 class="title">Chá de Bebê</h1>
+      <p class="name">Vicente</p>
+      <div class="ribbon">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7Zm12 7v10H5V9h14Z"/></svg>
+        <span>Domingo, 12 de julho &nbsp;·&nbsp; às 16h</span>
+      </div>
+    </header>
+
+    <!-- Mensagem -->
+    <section class="message reveal" style="--d:2">
+      <p>Estamos muito felizes em compartilhar esse momento tão especial com você!</p>
+      <p>Para facilitar sua chegada, deixamos o link da localização logo abaixo. Ao clicar nele, você será direcionado diretamente ao local do nosso Chá de Bebê, tornando sua chegada mais prática e tranquila.</p>
+      <p>Será uma alegria contar com a sua presença para celebrar a chegada do nosso pequeno Vicente e esse dia tão especial para nossa família. Esperamos por você! <span class="emoji">🧸🤍</span></p>
+    </section>
+
+    <a class="map-btn reveal" style="--d:3" href="https://maps.app.goo.gl/3Qi4pS3xLP8T8Puj8" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+      Ver localização no mapa
+    </a>
+
+    <!-- RSVP -->
+    <section class="rsvp reveal" style="--d:4" id="rsvp">
+      <h2 class="rsvp-title">Confirme sua presença</h2>
+      <p class="rsvp-sub">Digite seu nome para confirmar — vamos guardar um lugarzinho especial para você. 🤍</p>
+
+      <form id="rsvp-form" novalidate>
+        <div class="field">
+          <input type="text" id="nome" name="nome" placeholder=" " autocomplete="name" maxlength="80" required />
+          <label for="nome">Seu nome completo</label>
+        </div>
+        <button type="submit" id="submit-btn">
+          <span class="btn-label">Confirmar presença</span>
+          <span class="btn-spinner" aria-hidden="true"></span>
+        </button>
+        <p class="form-error" id="form-error" role="alert"></p>
+      </form>
+    </section>
+
+    <!-- Estado de sucesso (escondido até confirmar) -->
+    <section class="success" id="success" hidden>
+      <div class="bear">🧸</div>
+      <h2>Presença confirmada!</h2>
+      <p id="success-name">Obrigado por confirmar.</p>
+      <p class="success-note">Mal podemos esperar para celebrar a chegada do Vicente com você. Até dia <strong>12 de julho, às 16h</strong>! 🤍</p>
+      <a class="map-btn ghost" href="https://maps.app.goo.gl/3Qi4pS3xLP8T8Puj8" target="_blank" rel="noopener">Ver localização no mapa</a>
+    </section>
+
+    <footer class="card-footer reveal" style="--d:5">
+      <div class="info">
+        <strong>📍 Endereço</strong>
+        <span>Rua 12, Qd 18, Casa 16A — Altos do Turu II<br />São José de Ribamar — MA</span>
+      </div>
+      <div class="info">
+        <strong>🎁 Sugestão de presente</strong>
+        <span>Fraldas Pampers ou Huggies (Tam. P ou M) + um mimo 💝</span>
+      </div>
+    </footer>
+  </main>
+
+  <p class="signature">Feito com carinho para o nosso Vicente 🤍</p>
+
+  <!-- corações que sobem ao confirmar -->
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <script src="./assets/config.js"></script>
+  <script src="./assets/app.js"></script>
+</body>
+</html>
