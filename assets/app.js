@@ -1,6 +1,8 @@
 /* ============================================================
    Chá de Bebê do Vicente — RSVP
    Consome o endpoint público do back-end da pousada.
+   (O parallax e o contador ficam em event.js, usados por todas
+   as páginas.)
    ============================================================ */
 
 /* A URL do back-end vem da variável de ambiente API_BASE_URL (configurada na
@@ -79,55 +81,6 @@ function showSuccess(nome) {
 
   rainHearts();
 }
-
-/* ---------- Parallax: o ambiente reage ao mouse / inclinação ---------- */
-(function setupParallax() {
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) return;
-
-  const bear = document.querySelector(".bear-illo img");
-  const clouds = Array.from(document.querySelectorAll(".cloud"));
-  let tx = 0, ty = 0, cx = 0, cy = 0;
-
-  function apply(nx, ny) {
-    // nx, ny variam de -1 a 1
-    tx = nx; ty = ny;
-  }
-
-  window.addEventListener("mousemove", (e) => {
-    const nx = (e.clientX / window.innerWidth) * 2 - 1;
-    const ny = (e.clientY / window.innerHeight) * 2 - 1;
-    apply(nx, ny);
-  });
-
-  window.addEventListener(
-    "deviceorientation",
-    (e) => {
-      if (e.gamma == null) return;
-      apply(
-        Math.max(-1, Math.min(1, e.gamma / 30)),
-        Math.max(-1, Math.min(1, (e.beta - 45) / 30))
-      );
-    },
-    true
-  );
-
-  function tick() {
-    // suaviza o movimento
-    cx += (tx - cx) * 0.06;
-    cy += (ty - cy) * 0.06;
-
-    if (bear) bear.style.translate = `${cx * 12}px ${cy * 8}px`;
-    clouds.forEach((c, i) => {
-      const depth = (i % 2 === 0 ? 1 : -1) * (6 + i * 4);
-      c.style.marginLeft = `${cx * depth}px`;
-      c.style.marginTop = `${cy * depth * 0.5}px`;
-    });
-
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-})();
 
 /* Corações subindo na tela ao confirmar */
 function rainHearts() {

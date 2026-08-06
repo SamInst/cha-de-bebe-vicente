@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Parisienne&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="./assets/styles.css" />
+  <link rel="stylesheet" href="./assets/styles.css?v=4" />
 </head>
 <body>
   <!-- Céu de berçário -->
@@ -43,7 +43,12 @@
   </div>
 
   <main class="card">
-    <div class="bear-illo reveal" style="--d:0">
+    <a class="back-link reveal" style="--d:0" href="./index.html">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M15 18l-6-6 6-6z"/></svg>
+      Voltar ao convite
+    </a>
+
+    <div class="bear-illo compact reveal" style="--d:0">
       <img src="./assets/urso.png" alt="Ursinho com balões e luazinha sobre uma nuvem" loading="eager" />
     </div>
 
@@ -65,7 +70,8 @@
     <p class="signature">Feito com carinho para o nosso Vicente 🤍</p>
   </main>
 
-  <script src="./assets/config.js?v=2"></script>
-  <script src="./assets/lista.js?v=2"></script>
+  <script src="./assets/config.js?v=4"></script>
+  <script src="./assets/event.js?v=4"></script>
+  <script src="./assets/lista.js?v=4"></script>
 </body>
 </html>

@@ -3,6 +3,11 @@
   "buildCommand": "node build.js",
   "outputDirectory": ".",
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/mimos", "destination": "/#mimos" },
+    { "source": "/confirmar", "destination": "/#confirmar" },
+    { "source": "/local", "destination": "/#local" }
+  ],
   "headers": [
     {
       "source": "/assets/config.js",
