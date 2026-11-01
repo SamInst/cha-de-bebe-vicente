@@ -39,5 +39,9 @@
     { "item": "Naninha" },
     { "item": "Cotonete infantil" }
   ],
-  "mimoExtra": ""
+  "mimoExtra": "",
+
+  "api": {
+    "baseUrl": "https://maishospedagem-f47a91f6930a.herokuapp.com"
+  }
 }

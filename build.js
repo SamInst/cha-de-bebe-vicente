@@ -13,7 +13,7 @@
      EVENTO_LOCAL_NOME    nome do local                ex.: Arthur Pesque Pague
      EVENTO_LOCAL_ENDERECO endereço                    ex.: MA-014
      EVENTO_MAPA_URL      link do Google Maps
-     API_BASE_URL         back-end das confirmações
+     API_BASE_URL         back-end das confirmações (padrão: api.baseUrl do evento.json)
      API_CONFIRMAR_PATH   rota POST de confirmação     (padrão /cha-de-bebe/confirmar)
      API_LISTA_PATH       rota GET da lista            (padrão /cha-de-bebe/confirmacoes)
      SITE_URL             URL pública (deixa a prévia do WhatsApp com imagem)
@@ -82,6 +82,7 @@ if (!TEMAS[genero]) {
 const tema = TEMAS[genero];
 
 const nome = env("BEBE_NOME") || base.nome;
+const apiBase = env("API_BASE_URL") || (base.api && base.api.baseUrl) || "";
 const dataLocal = env("EVENTO_DATA") || base.data;
 const fuso = env("EVENTO_FUSO") || base.fuso || "-03:00";
 const local = {
@@ -205,7 +206,7 @@ function fundoMenina() {
 /* ---------- config.js lido pelo navegador ---------- */
 const configJs =
   `// Gerado automaticamente pelo build (node build.js). Não editar à mão.\n` +
-  `window.API_BASE_URL = ${JSON.stringify(env("API_BASE_URL"))};\n` +
+  `window.API_BASE_URL = ${JSON.stringify(apiBase)};\n` +
   `window.EVENTO = ${JSON.stringify({
     nome,
     genero,
@@ -231,4 +232,4 @@ for (const arq of fs.readdirSync(SRC).filter((f) => f.endsWith(".html"))) {
 }
 
 console.log(`dist/ gerado → ${v.titulo} (${genero}) · ${v.dataTexto}`);
-console.log(`API_BASE_URL = ${env("API_BASE_URL") || "(vazio)"}`);
+console.log(`API_BASE_URL = ${apiBase || "(vazio)"}`);
