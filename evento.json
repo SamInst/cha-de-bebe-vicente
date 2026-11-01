@@ -1,0 +1,43 @@
+{
+  "nome": "Celina",
+  "genero": "menina",
+  "data": "2026-11-22T16:00",
+  "fuso": "-03:00",
+
+  "versiculo": {
+    "texto": "Por esta filha orava eu, e o Senhor ouviu a minha oração",
+    "referencia": "1 Samuel 1:27"
+  },
+
+  "presente": {
+    "item": "Fralda M",
+    "marcas": "Pampers, Huggies",
+    "extra": "Mimo"
+  },
+
+  "local": {
+    "nome": "Arthur Pesque Pague",
+    "endereco": "MA-014",
+    "referencia": "",
+    "mapa": "https://www.google.com/maps/search/?api=1&query=Arthur+Pesque+Pague+MA-014+Maranh%C3%A3o"
+  },
+
+  "mimos": [
+    { "item": "Lenços umedecidos", "nota": "sugestão: Johnson's Baby, Bepantol Baby ou Granado sem perfume" },
+    { "item": "Lacinho ou tiara" },
+    { "item": "Porta-chupeta" },
+    { "item": "Algodão quadrado" },
+    { "item": "Roupinhas tam. G", "nota": "de 6 a 12 meses" },
+    { "item": "Sapatinho", "nota": "tamanho 15 a 22" },
+    { "item": "Brinquedo infantil", "nota": "de 0 a 6 meses" },
+    { "item": "Livro educativo infantil", "nota": "de 0 a 6 meses" },
+    { "item": "Pomada para assadura", "nota": "sugestão: Bepantol Baby ou Hipoglós transparente" },
+    { "item": "Mordedor" },
+    { "item": "Colônia infantil" },
+    { "item": "Shampoo e condicionador infantil" },
+    { "item": "Sabonete para bebê" },
+    { "item": "Naninha" },
+    { "item": "Cotonete infantil" }
+  ],
+  "mimoExtra": ""
+}

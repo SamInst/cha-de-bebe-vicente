@@ -1,31 +1,80 @@
 /* ============================================================
-   Chá de Bebê do Vicente — RSVP
-   Tema: céu de berçário, aquarela, ursinho 🧸
-   Ambiente dinâmico: céu animado, nuvens à deriva, parallax.
+   Chá de bebê — convite + RSVP
+   Dois temas, escolhidos pelo build (BEBE_GENERO) via <html data-tema>:
+     menino → céu de berçário, nuvens à deriva, ursinho 🧸
+     menina → listras rosa em movimento, laçinhos flutuando 🎀
+   As cores ficam em variáveis; cada tema só redefine as variáveis e o
+   seu fundo/capa. O resto do layout é compartilhado.
    ============================================================ */
 
+/* ---------- Tema menino (padrão) ---------- */
 :root {
-  --sky-top: #dcecf8;
-  --sky-mid: #eaf1f4;
-  --sky-bottom: #f4ecdf;
-  --cream: #fffdf8;
-  --ivory: #f6eede;
-  --sand: #ecdcc4;
-  --tan: #d6b387;
-  --caramel: #c19a6b;
-  --cocoa: #6e5238;
-  --cocoa-deep: #523c28;
-  --blue-soft: #bcd9ef;
-  --blue-ink: #5b7e98;
+  --bg-1: #dcecf8;
+  --bg-2: #eaf1f4;
+  --bg-3: #f4ecdf;
+
+  --ink: #523c28;          /* texto principal */
+  --ink-strong: #6e5238;   /* títulos */
+  --ink-soft: #6a5640;     /* parágrafos */
+  --ink-muted: #7a6448;    /* legendas */
+  --accent: #c19a6b;       /* destaque (nome, ícones) */
+  --line-rgb: 193, 154, 107;
+  --shadow-rgb: 110, 82, 56;
+
+  --soft: #bcd9ef;         /* cor secundária (botão do mapa, agradecimento) */
+  --soft-2: #a9cde9;
+  --soft-ink: #5b7e98;
+  --soft-ink-deep: #34536a;
+  --soft-rgb: 188, 217, 239;
+  --soft-ink-rgb: 91, 126, 152;
+
+  --btn-1: #c79a6a;
+  --btn-2: #a87c4e;
+
+  --glass: rgba(255, 250, 240, 0.46);
+  --glass-strong: rgba(255, 252, 244, 0.5);
   --gold: #e7c489;
-  --cloud: #ffffff; /* cor das nuvens */
-  --shadow: 28px 40px 80px -40px rgba(110, 82, 56, 0.45);
+  --cloud: #ffffff;
+
+  --font-script: "Parisienne", cursive;
+  --font-serif: "Fraunces", serif;
+  --font-date: "Fraunces", serif;
   --radius: 30px;
+}
+
+/* ---------- Tema menina (paleta do convite de referência) ---------- */
+:root[data-tema="menina"] {
+  --bg-1: #fdeef1;
+  --bg-2: #fbe4ea;
+  --bg-3: #fff6f8;
+
+  --ink: #6f4a5b;
+  --ink-strong: #d85f8c;
+  --ink-soft: #6e6468;
+  --ink-muted: #9a7b88;
+  --accent: #e8739c;
+  --line-rgb: 236, 140, 172;
+  --shadow-rgb: 196, 92, 132;
+
+  --soft: #fbd3df;
+  --soft-2: #f7bccd;
+  --soft-ink: #d9608c;
+  --soft-ink-deep: #a8345f;
+  --soft-rgb: 251, 211, 223;
+  --soft-ink-rgb: 217, 96, 140;
+
+  --btn-1: #f293b4;
+  --btn-2: #de6390;
+
+  --glass: rgba(254, 240, 244, 0.72);
+  --glass-strong: rgba(255, 246, 249, 0.85);
+
+  --font-script: "Great Vibes", cursive;
+  --font-date: "Noto Serif", Georgia, serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* visível apenas para leitores de tela */
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
@@ -40,11 +89,11 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: "Quicksand", system-ui, sans-serif;
-  color: var(--cocoa-deep);
+  color: var(--ink);
   min-height: 100vh;
   background:
     radial-gradient(1200px 600px at 50% -10%, #eaf3fb 0%, transparent 60%),
-    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-bottom) 100%);
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 45%, var(--bg-3) 100%);
   background-size: 100% 100%, 100% 220%;
   background-attachment: fixed;
   animation: skyShift 18s ease-in-out infinite alternate;
@@ -61,9 +110,12 @@ body {
   100% { background-position: 50% 0%, 50% 40%; }
 }
 
-/* ---------- Céu: estrelas + nuvens ---------- */
-.sky { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+/* ============================================================
+   Fundo animado
+   ============================================================ */
+.fundo { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
 
+/* ----- menino: estrelas + nuvens ----- */
 .star {
   position: absolute;
   width: 8px; height: 8px;
@@ -119,7 +171,79 @@ body {
 @keyframes drift { from { transform: translateX(0); } to { transform: translateX(115vw); } }
 @keyframes driftBack { from { transform: translateX(0); } to { transform: translateX(-115vw); } }
 
-/* ---------- Cartão principal ---------- */
+/* ----- menina: listras que deslizam + laçinhos e corações ----- */
+[data-tema="menina"] body {
+  background: var(--bg-1);
+  animation: none;
+}
+[data-tema="menina"] .fundo::before {
+  /* listras verticais do convite, deslizando devagar para o lado */
+  content: "";
+  position: absolute;
+  inset: 0 -140px 0 0;
+  background: repeating-linear-gradient(90deg,
+    var(--bg-1) 0 70px,
+    var(--bg-2) 70px 140px);
+  animation: listras 9.33s linear infinite; /* 3x mais rápido que o original (28s) */
+  will-change: transform;
+}
+[data-tema="menina"] .fundo::after {
+  /* brilho que "respira" sobre as listras */
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(40% 30% at 20% 20%, rgba(255, 255, 255, 0.75), transparent 70%),
+    radial-gradient(45% 35% at 85% 75%, rgba(255, 255, 255, 0.6), transparent 70%);
+  animation: brilho 14s ease-in-out infinite alternate;
+}
+@keyframes listras { to { transform: translateX(-140px); } }
+@keyframes brilho {
+  from { transform: translate(-4%, -2%) scale(1); opacity: 0.7; }
+  to   { transform: translate(4%, 3%) scale(1.08); opacity: 1; }
+}
+
+.laco-flutua {
+  position: absolute;
+  z-index: 1;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: auto;
+  opacity: 0.55;
+  animation: lacoBalanca var(--dur) ease-in-out infinite;
+  animation-delay: var(--atraso);
+  will-change: transform;
+}
+@keyframes lacoBalanca {
+  0%, 100% { transform: translate(-50%, 0) rotate(-8deg); }
+  25%      { transform: translate(calc(-50% + 14px), -22px) rotate(4deg); }
+  50%      { transform: translate(-50%, -34px) rotate(9deg); }
+  75%      { transform: translate(calc(-50% - 14px), -16px) rotate(-2deg); }
+}
+
+.coracao-sobe {
+  position: absolute;
+  z-index: 1;
+  bottom: -40px;
+  left: var(--x);
+  color: var(--accent);
+  font-size: 1.1rem;
+  opacity: 0;
+  animation: coracaoSobe var(--dur) linear infinite;
+  animation-delay: var(--atraso);
+}
+@keyframes coracaoSobe {
+  0%   { transform: translate(0, 0) scale(0.7); opacity: 0; }
+  10%  { opacity: 0.45; }
+  50%  { transform: translate(24px, -55vh) scale(1); }
+  90%  { opacity: 0.35; }
+  100% { transform: translate(-10px, -110vh) scale(0.8); opacity: 0; }
+}
+
+/* ============================================================
+   Cartão principal
+   ============================================================ */
 .card {
   position: relative;
   z-index: 1;
@@ -129,38 +253,71 @@ body {
   border-radius: var(--radius);
   padding: 18px 34px 34px;
 }
-/* moldura pontilhada interna decorativa */
+/* moldura pontilhada interna (menino) */
 .card::after {
   content: "";
   position: absolute;
   inset: 8px;
-  border: 1.5px dashed rgba(193, 154, 107, 0.5);
+  border: 1.5px dashed rgba(var(--line-rgb), 0.5);
   border-radius: calc(var(--radius) - 8px);
   pointer-events: none;
 }
 
-/* ---------- Ilustração do ursinho ---------- */
-.bear-illo {
+/* menina: o conteúdo fica em várias "folhas" brancas com cantos recortados,
+   como no convite, separadas para o fundo listrado aparecer entre elas */
+[data-tema="menina"] .card {
+  margin-top: 70px; /* espaço para o laço que "transborda" o topo */
+  padding: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+[data-tema="menina"] .folha {
+  --canto: 36px;
+  padding: 28px 30px;
+  background:
+    radial-gradient(circle at 0 0,       transparent var(--canto), #fff calc(var(--canto) + 1px)) top left     / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 0,    transparent var(--canto), #fff calc(var(--canto) + 1px)) top right    / 51% 51% no-repeat,
+    radial-gradient(circle at 0 100%,    transparent var(--canto), #fff calc(var(--canto) + 1px)) bottom left  / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent var(--canto), #fff calc(var(--canto) + 1px)) bottom right / 51% 51% no-repeat;
+}
+[data-tema="menina"] .folha-topo { --canto: 44px; padding-top: 0; padding-bottom: 44px; }
+[data-tema="menina"] .card::after { display: none; }
+/* o primeiro bloco de cada folha não precisa do respiro de cima */
+.hero-info .where,
+.folha > .countdown-wrap:first-child,
+.folha > .confirmar-box { margin-top: 0; }
+.hero-info { margin-top: 0; }
+/* menino continua com um cartão só: as folhas não aparecem como blocos */
+:root:not([data-tema="menina"]) .hero-info .where { margin-top: 20px; }
+:root:not([data-tema="menina"]) .folha > .countdown-wrap:first-child { margin-top: 24px; }
+:root:not([data-tema="menina"]) .folha > .confirmar-box { margin-top: 18px; }
+.mascote:last-child { margin-bottom: 0; }
+
+/* ============================================================
+   Capa (ilustração do topo)
+   ============================================================ */
+.capa {
   position: relative;
   text-align: center;
   margin-top: 6px;
   z-index: 2;
 }
-.bear-illo img {
+.capa-img {
   width: min(78%, 320px);
   height: auto;
-  filter: drop-shadow(0 22px 26px rgba(91, 126, 152, 0.32));
+  filter: drop-shadow(0 22px 26px rgba(var(--soft-ink-rgb), 0.32));
   animation: floatBear 6s ease-in-out infinite;
   transform-origin: center bottom;
   will-change: transform;
 }
-.bear-illo.compact img { width: min(52%, 200px); }
+.capa.compact .capa-img { width: min(52%, 200px); }
 @keyframes floatBear {
   0%, 100% { transform: translateY(0) rotate(-1deg); }
   50% { transform: translateY(-14px) rotate(1deg); }
 }
-/* brilho suave atrás do ursinho */
-.bear-illo::before {
+.capa::before {
   content: "";
   position: absolute;
   inset: 8% 22% auto 22%;
@@ -170,75 +327,173 @@ body {
   z-index: -1;
 }
 
-/* ---------- Hero ---------- */
+/* menina: laço grande saindo do topo da moldura + dois laçinhos */
+[data-tema="menina"] .capa { margin: -86px auto 0; width: 100%; }
+[data-tema="menina"] .capa::before { display: none; }
+[data-tema="menina"] .capa-img {
+  width: min(70%, 330px);
+  filter: drop-shadow(0 14px 18px rgba(var(--shadow-rgb), 0.18));
+  transform-origin: 50% 35%;
+  animation: lacoGrande 7s ease-in-out infinite;
+}
+[data-tema="menina"] .capa.compact { margin-top: -70px; }
+[data-tema="menina"] .capa.compact .capa-img { width: min(48%, 200px); }
+@keyframes lacoGrande {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-8px) rotate(2deg); }
+}
+.lacinho {
+  position: absolute;
+  width: clamp(54px, 15%, 84px);
+  height: auto;
+  animation: lacinho 5s ease-in-out infinite;
+}
+.lacinho-esq { left: 0; top: 64%; }
+.lacinho-dir { right: 0; top: 52%; animation-delay: -2.5s; }
+@keyframes lacinho {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50%      { transform: translateY(-9px) rotate(6deg); }
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
 .hero { text-align: center; margin-top: -6px; }
 .eyebrow {
   font-size: 0.8rem;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--caramel);
+  color: var(--accent);
   font-weight: 600;
   margin-bottom: 4px;
 }
-.title {
-  font-family: "Fraunces", serif;
+.title { font-weight: normal; line-height: 1; }
+.title-cha {
+  display: block;
+  font-family: var(--font-serif);
   font-weight: 500;
   font-size: clamp(2rem, 8vw, 2.9rem);
-  color: var(--cocoa);
-  line-height: 1;
+  color: var(--ink-strong);
 }
 .name {
-  font-family: "Parisienne", cursive;
+  display: block;
+  font-family: var(--font-script);
   font-size: clamp(3.8rem, 17vw, 5.6rem);
-  color: var(--caramel);
+  color: var(--accent);
   line-height: 0.9;
   margin-top: -6px;
   text-shadow: 0 2px 0 rgba(255, 255, 255, 0.6);
 }
-.ribbon {
+/* menina: "Chá da Celina" inteiro na mesma letra cursiva, como no convite */
+[data-tema="menina"] .title { margin-top: 4px; }
+[data-tema="menina"] .title-cha,
+[data-tema="menina"] .name {
+  display: inline;
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(3rem, 13.5vw, 4.6rem);
+  color: var(--accent);
+  line-height: 1.05;
+  margin: 0;
+  text-shadow: none;
+}
+
+.verse {
+  margin: 14px auto 0;
+  max-width: 400px;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.verse cite { display: block; font-style: normal; margin-top: 2px; font-size: 0.95rem; }
+
+/* bloco de data: MÊS / DIA DA SEMANA | 22 | ÀS 16:00 */
+.date-block {
+  margin: 16px auto 0;
+  max-width: 400px;
+  color: var(--accent);
+  font-family: var(--font-date);
+}
+.db-month {
+  display: block;
+  font-size: 1.35rem;
+  letter-spacing: 0.22em;
+  padding-left: 0.22em;
+}
+.db-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+}
+.db-side {
+  padding: 8px 0;
+  border-top: 3px solid var(--accent);
+  border-bottom: 3px solid var(--accent);
+  font-size: clamp(0.88rem, 3.6vw, 1.12rem);
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+}
+.db-day {
+  font-size: clamp(3rem, 14vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.where {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  margin-top: 12px;
-  padding: 9px 20px;
-  background: rgba(255, 252, 244, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.92rem;
-  color: var(--cocoa-deep);
-  border: 1px solid rgba(193, 154, 107, 0.5);
+  gap: 5px;
+  margin-top: 20px;
+  font-family: var(--font-date);
+  font-size: 0.98rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
-.ribbon svg { color: var(--caramel); }
+.gift {
+  margin: 10px auto 0;
+  max-width: 420px;
+  font-family: var(--font-date);
+  font-weight: 700;
+  font-size: 1.12rem;
+  line-height: 1.45;
+  color: var(--accent);
+}
+.gift em { font-style: italic; }
+.gift-brands { font-weight: 400; font-style: italic; }
 
 /* ---------- Voltar ---------- */
 .back-link {
+  position: relative;
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   margin-bottom: 2px;
   padding: 7px 14px 7px 10px;
-  background: rgba(255, 252, 244, 0.5);
+  background: var(--glass-strong);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(193, 154, 107, 0.45);
+  border: 1px solid rgba(var(--line-rgb), 0.45);
   border-radius: 999px;
-  color: var(--caramel);
+  color: var(--accent);
   font-size: 0.82rem;
   font-weight: 700;
   text-decoration: none;
   transition: transform 0.2s ease, color 0.2s ease;
 }
-.back-link:hover { transform: translateX(-2px); color: var(--cocoa); }
+.back-link:hover { transform: translateX(-2px); color: var(--ink-strong); }
+.back-link { align-self: center; }
+[data-tema="menina"] .back-link { margin-bottom: 0; }
 
 /* ---------- Contador regressivo ---------- */
-.countdown-wrap { margin-top: 22px; text-align: center; }
+.countdown-wrap { margin-top: 24px; text-align: center; }
 .countdown-title {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-serif);
   font-weight: 500;
   font-size: 1.12rem;
-  color: var(--cocoa);
+  color: var(--ink-strong);
   margin-bottom: 12px;
 }
 .countdown {
@@ -254,19 +509,19 @@ body {
   gap: 2px;
   min-width: 66px;
   padding: 12px 6px 10px;
-  background: rgba(255, 252, 244, 0.5);
+  background: var(--glass-strong);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(193, 154, 107, 0.45);
+  border: 1px solid rgba(var(--line-rgb), 0.45);
   border-radius: 18px;
-  box-shadow: 0 16px 34px -26px rgba(110, 82, 56, 0.55);
+  box-shadow: 0 16px 34px -26px rgba(var(--shadow-rgb), 0.55);
 }
 .cd-num {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-serif);
   font-weight: 600;
   font-size: 1.85rem;
   line-height: 1;
-  color: var(--cocoa);
+  color: var(--ink-strong);
   font-variant-numeric: tabular-nums;
 }
 .cd-label {
@@ -274,24 +529,81 @@ body {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--caramel);
+  color: var(--accent);
 }
 .cd-sep {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-serif);
   font-size: 1.5rem;
-  color: rgba(193, 154, 107, 0.6);
+  color: rgba(var(--line-rgb), 0.7);
   line-height: 1;
   padding-top: 14px;
 }
-.countdown.is-over .cd-num { color: var(--caramel); }
+.countdown.is-over .cd-num { color: var(--accent); }
 .countdown-note {
   margin-top: 10px;
-  font-size: 0.86rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #7a6448;
+  color: var(--ink-muted);
 }
 
-/* ---------- Abas que expandem no lugar ---------- */
+/* ---------- Mensagem ---------- */
+.message {
+  margin: 24px 4px;
+  text-align: center;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.message p + p { margin-top: 14px; }
+[data-tema="menina"] .message {
+  font-family: var(--font-date);
+  color: var(--accent);
+  font-size: 0.98rem;
+  margin-top: 20px;
+}
+
+/* ---------- Mascote (ursinha com balões) ---------- */
+.mascote { text-align: center; margin: -6px 0 6px; }
+.mascote img {
+  width: 140px;
+  height: auto;
+  animation: floatBear 5.5s ease-in-out infinite;
+  filter: drop-shadow(0 16px 18px rgba(var(--shadow-rgb), 0.18));
+}
+
+/* ---------- Confirmação de presença (fora das abas) ---------- */
+.confirmar-box {
+  margin-top: 18px;
+  padding: 24px 22px 20px;
+  text-align: center;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid var(--accent);
+  border-radius: 22px;
+  box-shadow: 0 22px 40px -26px rgba(var(--shadow-rgb), 0.6);
+  scroll-margin-top: 16px;
+}
+.confirmar-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.3rem;
+  color: var(--ink-strong);
+  margin-bottom: 6px;
+}
+[data-tema="menina"] .confirmar-title {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: 2.3rem;
+  color: var(--accent);
+  line-height: 1.1;
+}
+/* o sucesso substitui o formulário dentro da mesma moldura */
+.confirmar-box .success { padding: 8px 4px 4px; background: none; border: 0; }
+
+/* ============================================================
+   Abas que expandem no lugar
+   ============================================================ */
 .accordion {
   display: flex;
   flex-direction: column;
@@ -299,21 +611,20 @@ body {
   margin-top: 24px;
 }
 .acc-item {
-  background: rgba(255, 250, 240, 0.46);
+  background: var(--glass);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(193, 154, 107, 0.45);
+  border: 1px solid rgba(var(--line-rgb), 0.45);
   border-radius: 20px;
-  box-shadow: 0 16px 34px -26px rgba(110, 82, 56, 0.5);
+  box-shadow: 0 16px 34px -26px rgba(var(--shadow-rgb), 0.5);
   overflow: hidden;
-  /* respiro ao rolar a aba para o topo, em vez de colar na borda da tela */
   scroll-margin-top: 16px;
   scroll-margin-bottom: 16px;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .acc-item.is-open {
-  border-color: var(--caramel);
-  box-shadow: 0 22px 40px -26px rgba(110, 82, 56, 0.6);
+  border-color: var(--accent);
+  box-shadow: 0 22px 40px -26px rgba(var(--shadow-rgb), 0.6);
 }
 .acc-heading { margin: 0; font-size: inherit; font-weight: inherit; }
 .acc-trigger {
@@ -329,17 +640,17 @@ body {
   border: 0;
   cursor: pointer;
 }
-.acc-trigger:focus-visible { outline: 2px solid var(--caramel); outline-offset: -5px; border-radius: 18px; }
+.acc-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; border-radius: 18px; }
 .acc-text { flex: 1; display: flex; flex-direction: column; gap: 2px; }
 .acc-text strong {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-serif);
   font-weight: 500;
   font-size: 1.1rem;
-  color: var(--cocoa);
+  color: var(--ink-strong);
   line-height: 1.2;
 }
-.acc-text small { font-size: 0.8rem; color: #7a6448; line-height: 1.35; }
-.acc-chevron { flex: none; color: var(--caramel); transition: transform 0.3s ease; }
+.acc-text small { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.35; }
+.acc-chevron { flex: none; color: var(--accent); transition: transform 0.3s ease; }
 .acc-item.is-open .acc-chevron { transform: rotate(180deg); }
 
 .acc-panel {
@@ -348,7 +659,6 @@ body {
   transition: height 0.38s cubic-bezier(0.3, 0.85, 0.35, 1);
 }
 .acc-inner { padding: 2px 18px 20px; }
-/* o conteúdo herda a moldura da própria aba — nada de cartão dentro de cartão */
 .acc-inner .rsvp,
 .acc-inner .place {
   margin: 0;
@@ -366,58 +676,54 @@ body {
 /* ---------- Lista de mimos ---------- */
 .mimo-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
 .mimo-list li {
-  /* o ♥ é o primeiro item da linha e senta na mesma base do texto; o texto
-     ocupa o resto e quebra alinhado consigo mesmo, sem recuo negativo. */
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0 10px;
   font-size: 1.02rem;
   line-height: 1.35;
-  color: var(--cocoa-deep);
+  color: var(--ink);
 }
 .mimo-list li::before {
   content: "♥";
   flex: none;
   width: 16px;
-  color: var(--blue-ink);
+  color: var(--soft-ink);
   font-size: 0.95rem;
 }
-.mimo-list li + li { border-top: 1px dashed rgba(193, 154, 107, 0.3); padding-top: 11px; }
+.mimo-list li + li { border-top: 1px dashed rgba(var(--line-rgb), 0.3); padding-top: 11px; }
 .mimo-list small {
   flex-basis: 100%;
   margin: 2px 0 0 26px; /* 16px do ♥ + 10px do gap: alinha com o texto acima */
   font-size: 0.84rem;
-  color: var(--blue-ink);
+  color: var(--soft-ink);
   font-weight: 600;
 }
 .mimo-extra {
   margin-top: 16px;
   padding-top: 14px;
-  border-top: 1px dashed rgba(193, 154, 107, 0.45);
+  border-top: 1px dashed rgba(var(--line-rgb), 0.45);
   text-align: center;
   font-size: 0.95rem;
   line-height: 1.5;
-  color: #6a5640;
+  color: var(--ink-soft);
 }
 
 .thanks-note {
   margin-top: 18px;
   padding: 20px 18px;
   text-align: center;
-  background: rgba(238, 245, 252, 0.44);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(188, 217, 239, 0.7);
+  background: rgba(var(--soft-rgb), 0.3);
+  border: 1px solid rgba(var(--soft-rgb), 0.9);
   border-radius: 20px;
-  color: #6a5640;
+  color: var(--ink-soft);
   line-height: 1.5;
   font-size: 0.98rem;
 }
 .thanks-name {
-  font-family: "Parisienne", cursive;
+  font-family: var(--font-script);
   font-size: 2.4rem;
-  color: var(--blue-ink);
+  color: var(--soft-ink);
   line-height: 1.1;
   margin: 2px 0;
 }
@@ -429,39 +735,36 @@ body {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  background: rgba(255, 250, 240, 0.46);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: var(--glass);
   border-radius: 24px;
-  border: 1px solid rgba(193, 154, 107, 0.45);
-  box-shadow: 0 18px 40px -28px rgba(110, 82, 56, 0.4);
+  border: 1px solid rgba(var(--line-rgb), 0.45);
 }
 .place-row { display: flex; align-items: flex-start; gap: 14px; }
-.place-row + .place-row { border-top: 1px dashed rgba(193, 154, 107, 0.4); padding-top: 18px; }
+.place-row + .place-row { border-top: 1px dashed rgba(var(--line-rgb), 0.4); padding-top: 18px; }
 .place-icon {
   flex: none;
   width: 40px; height: 40px;
   display: grid;
   place-items: center;
   font-size: 1.2rem;
-  background: linear-gradient(180deg, #fffdf8, var(--ivory));
-  border: 1px solid rgba(193, 154, 107, 0.35);
+  background: #fff;
+  border: 1px solid rgba(var(--line-rgb), 0.35);
   border-radius: 50%;
 }
 .place-row strong {
   display: block;
-  font-family: "Fraunces", serif;
+  font-family: var(--font-serif);
   font-weight: 500;
   font-size: 1.16rem;
-  color: var(--cocoa);
+  color: var(--ink-strong);
   margin-bottom: 3px;
 }
-.place-row p { color: #6a5640; line-height: 1.5; font-size: 0.98rem; }
+.place-row p { color: var(--ink-soft); line-height: 1.5; font-size: 0.98rem; }
 .place-ref {
   margin-top: 8px;
   font-size: 0.88rem !important;
   font-weight: 600;
-  color: var(--blue-ink) !important;
+  color: var(--soft-ink) !important;
 }
 
 /* ---------- Botão de mapa ---------- */
@@ -472,49 +775,22 @@ body {
   gap: 9px;
   width: 100%;
   padding: 15px;
-  background: linear-gradient(180deg, var(--blue-soft), #a9cde9);
-  color: #34536a;
+  background: linear-gradient(180deg, var(--soft), var(--soft-2));
+  color: var(--soft-ink-deep);
   font-weight: 700;
   font-size: 0.98rem;
   text-decoration: none;
   border-radius: 16px;
-  border: 1px solid rgba(91, 126, 152, 0.3);
-  box-shadow: 0 12px 22px -12px rgba(91, 126, 152, 0.7);
+  border: 1px solid rgba(var(--soft-ink-rgb), 0.3);
+  box-shadow: 0 12px 22px -12px rgba(var(--soft-ink-rgb), 0.7);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.map-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 28px -12px rgba(91, 126, 152, 0.8); }
+.map-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 28px -12px rgba(var(--soft-ink-rgb), 0.8); }
 .map-btn:active { transform: translateY(0); }
-.map-btn.ghost {
-  background: transparent;
-  border: 1.5px solid var(--blue-soft);
-  box-shadow: none;
-  margin-top: 18px;
-}
-
-/* ---------- Mensagem ---------- */
-.message {
-  margin: 24px 4px;
-  text-align: center;
-  font-size: 1.02rem;
-  line-height: 1.7;
-  color: #6a5640;
-}
-.message p + p { margin-top: 14px; }
-.message .emoji { font-size: 1.2rem; white-space: nowrap; }
 
 /* ---------- RSVP ---------- */
-.rsvp {
-  margin-top: 22px;
-  padding: 30px 24px;
-  background: rgba(255, 250, 240, 0.42);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 24px;
-  border: 1px solid rgba(193, 154, 107, 0.45);
-  box-shadow: 0 18px 40px -28px rgba(110, 82, 56, 0.4);
-  text-align: center;
-}
-.rsvp-sub { margin: 0 0 18px; color: #7a6448; font-size: 0.95rem; line-height: 1.55; }
+.rsvp { text-align: center; }
+.rsvp-sub { margin: 0 0 18px; color: var(--ink-muted); font-size: 0.95rem; line-height: 1.55; }
 
 .field { position: relative; margin-bottom: 14px; text-align: left; }
 .field input {
@@ -522,25 +798,25 @@ body {
   padding: 18px 16px 8px;
   font-family: inherit;
   font-size: 1.05rem;
-  color: var(--cocoa-deep);
-  background: rgba(255, 255, 255, 0.85);
-  border: 1.5px solid rgba(193, 154, 107, 0.5);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(var(--line-rgb), 0.5);
   border-radius: 14px;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.field input:focus { border-color: var(--caramel); box-shadow: 0 0 0 4px rgba(214, 179, 135, 0.25); }
+.field input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(var(--line-rgb), 0.22); }
 .field label {
   position: absolute;
   left: 16px; top: 15px;
-  color: #a98c66;
+  color: var(--ink-muted);
   font-size: 1.02rem;
   pointer-events: none;
   transition: all 0.18s ease;
 }
 .field input:focus + label,
 .field input:not(:placeholder-shown) + label {
-  top: 6px; font-size: 0.72rem; color: var(--caramel); font-weight: 600; letter-spacing: 0.03em;
+  top: 6px; font-size: 0.72rem; color: var(--accent); font-weight: 600; letter-spacing: 0.03em;
 }
 
 #submit-btn {
@@ -551,15 +827,15 @@ body {
   font-weight: 700;
   font-size: 1.05rem;
   color: #fff;
-  background: linear-gradient(180deg, #c79a6a, #a87c4e);
+  background: linear-gradient(180deg, var(--btn-1), var(--btn-2));
   border: none;
   border-radius: 16px;
   cursor: pointer;
-  box-shadow: 0 14px 26px -12px rgba(110, 82, 56, 0.8);
+  box-shadow: 0 14px 26px -12px rgba(var(--shadow-rgb), 0.8);
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
   overflow: hidden;
 }
-#submit-btn:hover { transform: translateY(-2px); box-shadow: 0 20px 32px -12px rgba(110, 82, 56, 0.85); }
+#submit-btn:hover { transform: translateY(-2px); box-shadow: 0 20px 32px -12px rgba(var(--shadow-rgb), 0.85); }
 #submit-btn:active { transform: translateY(0); }
 #submit-btn[disabled] { opacity: 0.75; cursor: progress; }
 
@@ -586,82 +862,52 @@ body {
 
 /* ---------- Sucesso ---------- */
 .success {
-  margin-top: 22px;
-  padding: 36px 26px;
+  padding: 30px 20px;
   text-align: center;
-  background: rgba(238, 245, 252, 0.48);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(var(--soft-rgb), 0.3);
   border-radius: 24px;
-  border: 1px solid rgba(188, 217, 239, 0.7);
-  box-shadow: 0 18px 40px -28px rgba(91, 126, 152, 0.45);
+  border: 1px solid rgba(var(--soft-rgb), 0.9);
   animation: popIn 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
 }
 .success .bear { font-size: 3.4rem; animation: bob 2.6s ease-in-out infinite; }
 .success h3 {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-serif);
   font-weight: 500;
   font-size: 1.9rem;
-  color: var(--cocoa);
+  color: var(--ink-strong);
   margin: 6px 0 4px;
 }
-#success-name { font-size: 1.1rem; font-weight: 600; color: var(--caramel); }
-.success-note { margin-top: 12px; color: #6a5640; line-height: 1.6; }
+#success-name { font-size: 1.1rem; font-weight: 600; color: var(--accent); }
+.success-note { margin-top: 12px; color: var(--ink-soft); line-height: 1.6; }
 @keyframes popIn { from { opacity: 0; transform: scale(0.92) translateY(12px); } to { opacity: 1; transform: none; } }
 @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
-
-/* ---------- Rodapé ---------- */
-.card-footer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 28px;
-}
-.info {
-  background: rgba(255, 252, 244, 0.42);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 16px;
-  padding: 14px 16px;
-  font-size: 0.82rem;
-  line-height: 1.5;
-  color: #6a5640;
-  border: 1px solid rgba(193, 154, 107, 0.4);
-}
-.info strong {
-  display: block;
-  font-family: "Fraunces", serif;
-  font-size: 0.95rem;
-  color: var(--cocoa);
-  margin-bottom: 4px;
-}
 
 .signature {
   position: relative;
   z-index: 1;
   margin-top: 22px;
-  font-family: "Parisienne", cursive;
-  font-size: 1.3rem;
-  color: var(--caramel);
+  font-family: var(--font-script);
+  font-size: 1.4rem;
+  color: var(--accent);
   text-align: center;
 }
 
-/* ---------- Lista de confirmados ---------- */
+/* ============================================================
+   Lista de confirmados
+   ============================================================ */
 .count-pill {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 9px;
-  margin: 4px auto 22px;
+  margin: 14px auto 22px;
   width: fit-content;
   padding: 10px 22px;
-  background: rgba(255, 252, 244, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--glass-strong);
   border-radius: 999px;
-  border: 1px solid rgba(193, 154, 107, 0.5);
+  border: 1px solid rgba(var(--line-rgb), 0.5);
   font-weight: 700;
-  color: var(--cocoa);
+  color: var(--ink-strong);
   font-size: 0.98rem;
 }
 .count-pill .bear-mini { font-size: 1.2rem; }
@@ -673,12 +919,10 @@ body {
   align-items: center;
   gap: 14px;
   padding: 16px 18px;
-  background: rgba(255, 250, 240, 0.44);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: var(--glass);
   border-radius: 16px;
-  border: 1px solid rgba(193, 154, 107, 0.4);
-  box-shadow: 0 14px 32px -26px rgba(110, 82, 56, 0.5);
+  border: 1px solid rgba(var(--line-rgb), 0.4);
+  box-shadow: 0 14px 32px -26px rgba(var(--shadow-rgb), 0.5);
   animation: guestIn 0.5s ease both;
   animation-delay: calc(var(--i) * 0.06s);
 }
@@ -686,25 +930,24 @@ body {
   from { opacity: 0; transform: translateX(-14px); }
   to { opacity: 1; transform: none; }
 }
-
 .guest-num {
   flex: none;
   width: 34px; height: 34px;
   display: grid;
   place-items: center;
-  background: linear-gradient(180deg, var(--blue-soft), #a9cde9);
-  color: #34536a;
+  background: linear-gradient(180deg, var(--soft), var(--soft-2));
+  color: var(--soft-ink-deep);
   font-weight: 700;
   font-size: 0.82rem;
   border-radius: 50%;
-  border: 1px solid rgba(91, 126, 152, 0.3);
+  border: 1px solid rgba(var(--soft-ink-rgb), 0.3);
 }
 .guest-name {
   flex: 1;
-  font-family: "Fraunces", serif;
+  font-family: var(--font-serif);
   font-weight: 500;
   font-size: 1.12rem;
-  color: var(--cocoa-deep);
+  color: var(--ink);
   text-transform: capitalize;
   line-height: 1.2;
 }
@@ -712,25 +955,18 @@ body {
   flex: none;
   font-size: 0.74rem;
   font-weight: 600;
-  color: var(--caramel);
+  color: var(--accent);
   white-space: nowrap;
 }
-
 .list-state {
   text-align: center;
-  color: #7a6448;
+  color: var(--ink-muted);
   font-size: 0.96rem;
   line-height: 1.6;
   padding: 14px 6px;
 }
 
-@media (max-width: 480px) {
-  .guest { padding: 14px; gap: 10px; }
-  .guest-name { font-size: 1.02rem; }
-  .guest-when { font-size: 0.7rem; }
-}
-
-/* ---------- Corações que sobem ---------- */
+/* ---------- Símbolos que sobem ao confirmar ---------- */
 .hearts { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
 .hearts span {
   position: absolute;
@@ -752,9 +988,18 @@ body {
 @media (max-width: 480px) {
   body { padding: 24px 12px 20px; }
   .card { padding: 14px 20px 24px; border-radius: 24px; }
-  .card-footer { grid-template-columns: 1fr; }
+  [data-tema="menina"] .card { margin-top: 56px; gap: 18px; }
+  [data-tema="menina"] .folha { --canto: 26px; padding: 24px 18px; }
+  [data-tema="menina"] .folha-topo { --canto: 30px; padding-top: 0; padding-bottom: 38px; }
+  [data-tema="menina"] .capa { margin-top: -66px; }
   .message { font-size: 0.98rem; }
-  .bear-illo img { width: 72%; }
+  .capa-img { width: 72%; }
+  [data-tema="menina"] .capa-img { width: 66%; }
+  .date-block { gap: 10px; }
+  .db-row { gap: 10px; }
+  .db-side { letter-spacing: 0.1em; border-width: 2px; }
+  .gift { font-size: 1.02rem; }
+  .verse { font-size: 0.98rem; }
 
   .countdown { gap: 4px; }
   .cd-box { min-width: 0; flex: 1; padding: 10px 2px 8px; border-radius: 15px; }
@@ -769,6 +1014,11 @@ body {
 
   .mimo-list li { font-size: 0.98rem; }
   .place { padding: 20px 16px; }
+
+  .guest { padding: 14px; gap: 10px; }
+  .guest-name { font-size: 1.02rem; }
+  .guest-when { font-size: 0.7rem; }
+  .laco-flutua { width: calc(var(--w) * 0.75); }
 }
 
 @media (prefers-reduced-motion: reduce) {

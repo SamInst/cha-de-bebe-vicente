@@ -1,14 +1,12 @@
 /* ============================================================
-   Chá de Bebê do Vicente — dados do evento + comportamentos
-   compartilhados por todas as páginas.
+   Chá de bebê — dados do evento + comportamentos compartilhados
+   por todas as páginas.
+   Os dados (nome, gênero, data…) vêm de window.EVENTO, gerado pelo
+   build em assets/config.js a partir de evento.json + variáveis de
+   ambiente. A data tem fuso explícito: o contador marca o mesmo tempo
+   restante mesmo para quem estiver em outro fuso.
    ============================================================ */
-
-/* Data/hora do evento com fuso explícito: assim o contador marca o
-   mesmo tempo restante mesmo para quem estiver em outro fuso. */
-const EVENTO = {
-  iso: "2026-08-22T16:00:00-03:00",
-  texto: "Sábado, 22 de agosto · às 16h",
-};
+const EVENTO = window.EVENTO || {};
 
 /* ---------- Contador regressivo ---------- */
 (function setupCountdown() {
@@ -34,7 +32,10 @@ const EVENTO = {
     if (restante <= 0) {
       root.classList.add("is-over");
       Object.values(campos).forEach((el) => el && (el.textContent = "00"));
-      if (legenda) legenda.textContent = "É hoje! Chegou o grande dia do Vicente 🧸🤍";
+      if (legenda) {
+        legenda.hidden = false;
+        legenda.textContent = `É hoje! Chegou o grande dia ${EVENTO.artigo || "do"} ${EVENTO.nome || "bebê"} ${EVENTO.emoji || ""}${EVENTO.coracao || ""}`;
+      }
       return true; // acabou: pode parar o timer
     }
 
@@ -177,36 +178,32 @@ const EVENTO = {
   }
 })();
 
-/* ---------- Parallax: o ambiente reage ao mouse / inclinação ---------- */
+/* ---------- Parallax: o ambiente reage ao mouse / inclinação ----------
+   Qualquer elemento com data-parallax="N" se desloca até N px (N negativo
+   vai para o lado oposto, dando sensação de profundidade). */
 (function setupParallax() {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) return;
 
-  const bear = document.querySelector(".bear-illo img");
-  const clouds = Array.from(document.querySelectorAll(".cloud"));
-  if (!bear && !clouds.length) return;
+  const itens = Array.from(document.querySelectorAll("[data-parallax]")).map((el) => ({
+    el,
+    p: parseFloat(el.dataset.parallax) || 0,
+  }));
+  if (!itens.length) return;
 
   let tx = 0, ty = 0, cx = 0, cy = 0;
 
-  function apply(nx, ny) {
-    // nx, ny variam de -1 a 1
-    tx = nx; ty = ny;
-  }
-
   window.addEventListener("mousemove", (e) => {
-    const nx = (e.clientX / window.innerWidth) * 2 - 1;
-    const ny = (e.clientY / window.innerHeight) * 2 - 1;
-    apply(nx, ny);
+    tx = (e.clientX / window.innerWidth) * 2 - 1;
+    ty = (e.clientY / window.innerHeight) * 2 - 1;
   });
 
   window.addEventListener(
     "deviceorientation",
     (e) => {
       if (e.gamma == null) return;
-      apply(
-        Math.max(-1, Math.min(1, e.gamma / 30)),
-        Math.max(-1, Math.min(1, (e.beta - 45) / 30))
-      );
+      tx = Math.max(-1, Math.min(1, e.gamma / 30));
+      ty = Math.max(-1, Math.min(1, (e.beta - 45) / 30));
     },
     true
   );
@@ -215,14 +212,10 @@ const EVENTO = {
     // suaviza o movimento
     cx += (tx - cx) * 0.06;
     cy += (ty - cy) * 0.06;
-
-    if (bear) bear.style.translate = `${cx * 12}px ${cy * 8}px`;
-    clouds.forEach((c, i) => {
-      const depth = (i % 2 === 0 ? 1 : -1) * (6 + i * 4);
-      c.style.marginLeft = `${cx * depth}px`;
-      c.style.marginTop = `${cy * depth * 0.5}px`;
+    // usa "translate" (propriedade própria) para não brigar com as animações em "transform"
+    itens.forEach(({ el, p }) => {
+      el.style.translate = `${(cx * p).toFixed(2)}px ${(cy * p * 0.6).toFixed(2)}px`;
     });
-
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);

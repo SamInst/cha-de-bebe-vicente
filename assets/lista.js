@@ -1,5 +1,5 @@
 /* ============================================================
-   Chá de Bebê do Vicente — Lista de confirmados
+   Chá de bebê — Lista de confirmados
    ============================================================ */
 
 const isLocal =
@@ -9,7 +9,7 @@ const API_BASE = isLocal
   ? "http://localhost:8080"
   : (window.API_BASE_URL || "").replace(/\/+$/, "");
 
-const ENDPOINT = `${API_BASE}/cha-de-bebe/confirmacoes`;
+const ENDPOINT = `${API_BASE}${(window.EVENTO || {}).apiLista || "/cha-de-bebe/confirmacoes"}`;
 
 const listEl = document.getElementById("guest-list");
 const stateEl = document.getElementById("list-state");
@@ -36,7 +36,7 @@ function render(lista) {
 
   if (total === 0) {
     listEl.innerHTML =
-      '<p class="list-state">Ainda não há confirmações. Assim que alguém confirmar, aparece aqui. 🤍</p>';
+      `<p class="list-state">Ainda não há confirmações. Assim que alguém confirmar, aparece aqui. ${(window.EVENTO || {}).coracao || "🤍"}</p>`;
     return;
   }
 

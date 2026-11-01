@@ -1,11 +1,15 @@
-// Servidor estático simples para preview local (sem dependências).
+// Preview local: gera o site (node build.js) e serve a pasta dist/.
 // Uso: node serve.js   ->   http://localhost:5500
+// Para testar outro bebê sem mexer em nada: crie um .env (veja .env.example)
+// ou rode, por exemplo:  BEBE_NOME=Vicente BEBE_GENERO=menino node serve.js
+require("./build.js");
+
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
-const ROOT = __dirname;
-const PORT = 5500;
+const ROOT = path.join(__dirname, "dist");
+const PORT = Number(process.env.PORT) || 5500;
 const TYPES = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -21,6 +25,7 @@ http
   .createServer((req, res) => {
     let urlPath = decodeURIComponent(req.url.split("?")[0]);
     if (urlPath === "/") urlPath = "/index.html";
+    if (!path.extname(urlPath)) urlPath += ".html"; // imita o cleanUrls da Vercel (/lista)
     const filePath = path.join(ROOT, urlPath);
 
     if (!filePath.startsWith(ROOT)) {

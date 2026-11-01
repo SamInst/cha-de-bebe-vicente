@@ -1,5 +1,7 @@
 node_modules/
 .idea/
 .vercel/
+dist/
+.env
 *.log
 .DS_Store

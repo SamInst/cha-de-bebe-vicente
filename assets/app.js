@@ -1,5 +1,5 @@
 /* ============================================================
-   Chá de Bebê do Vicente — RSVP
+   Chá de bebê — RSVP
    Consome o endpoint público do back-end da pousada.
    (O parallax e o contador ficam em event.js, usados por todas
    as páginas.)
@@ -22,7 +22,7 @@ if (!isLocal && !API_BASE) {
   );
 }
 
-const ENDPOINT = `${API_BASE}/cha-de-bebe/confirmar`;
+const ENDPOINT = `${API_BASE}${(window.EVENTO || {}).apiConfirmar || "/cha-de-bebe/confirmar"}`;
 
 const form = document.getElementById("rsvp-form");
 const nomeInput = document.getElementById("nome");
@@ -73,7 +73,7 @@ function setLoading(isLoading) {
 
 function showSuccess(nome) {
   const primeiroNome = nome.split(" ")[0];
-  successName.textContent = `Que alegria, ${primeiroNome}! 🤍`;
+  successName.textContent = `Que alegria, ${primeiroNome}! ${(window.EVENTO || {}).coracao || "🤍"}`;
 
   rsvpSection.hidden = true;
   successSection.hidden = false;
@@ -82,10 +82,10 @@ function showSuccess(nome) {
   rainHearts();
 }
 
-/* Corações subindo na tela ao confirmar */
+/* Símbolos do tema subindo na tela ao confirmar */
 function rainHearts() {
   const layer = document.getElementById("hearts");
-  const symbols = ["🤍", "🧸", "💛", "☁️", "⭐"];
+  const symbols = (window.EVENTO || {}).chuva || ["🤍", "🧸", "💛", "☁️", "⭐"];
   const total = 26;
 
   for (let i = 0; i < total; i++) {

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!-- Template: os campos entre chaves duplas são preenchidos pelo build.js (evento.json + variáveis de ambiente). -->
+<html lang="pt-BR" data-tema="{{genero}}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{titulo}} · Confirmados</title>
+  <meta name="description" content="Lista de presenças confirmadas no {{titulo}}. {{emoji}}" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>{{emoji}}</text></svg>" />
+
+  <!-- Console na tela para depurar no celular: acesse a URL com ?debug=1 -->
+  <script>
+    (function () {
+      if (!/[?&]debug/.test(location.search)) return;
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/eruda@3.4.1";
+      s.onload = function () { window.eruda && eruda.init(); };
+      document.head.appendChild(s);
+    })();
+    window.addEventListener("error", function (e) {
+      console.error("Erro:", e.message, "em", e.filename + ":" + e.lineno);
+    });
+    window.addEventListener("unhandledrejection", function (e) {
+      console.error("Promise rejeitada:", e.reason && (e.reason.message || e.reason));
+    });
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Great+Vibes&family=Noto+Serif:ital,wght@0,400;0,700;1,700&family=Parisienne&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./assets/styles.css?v={{versao}}" />
+</head>
+<body>
+  <div class="fundo" aria-hidden="true">
+    {{{fundoHtml}}}
+  </div>
+
+  <a class="back-link reveal" style="--d:0" href="./index.html">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M15 18l-6-6 6-6z"/></svg>
+    Voltar ao convite
+  </a>
+
+  <main class="card">
+    <div class="folha folha-topo">
+    <div class="capa compact reveal" style="--d:0">
+      <img class="capa-img" src="./{{capaSrc}}" alt="{{capaAlt}}" data-parallax="12" loading="eager" />
+    </div>
+
+    <header class="hero reveal" style="--d:1">
+      <p class="eyebrow">Lista de presenças confirmadas</p>
+      <h1 class="title"><span class="title-cha">Chá {{artigo}}</span> <span class="name">{{nome}}</span></h1>
+    </header>
+
+    <div class="count-pill reveal" style="--d:2" id="count-pill">
+      <span class="bear-mini">{{emoji}}</span>
+      <span id="count-text">Carregando…</span>
+    </div>
+
+    <section class="guest-list reveal" style="--d:3" id="guest-list" aria-live="polite">
+      <p class="list-state" id="list-state">Buscando confirmações…</p>
+    </section>
+    </div>
+  </main>
+
+  <p class="signature">Feito com carinho para {{artDef}} {{nossa}} {{nome}} {{coracao}}</p>
+
+  <script src="./assets/config.js?v={{versao}}"></script>
+  <script src="./assets/event.js?v={{versao}}"></script>
+  <script src="./assets/lista.js?v={{versao}}"></script>
+</body>
+</html>

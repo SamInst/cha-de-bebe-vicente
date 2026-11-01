@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!-- Template: os campos entre chaves duplas são preenchidos pelo build.js (evento.json + variáveis de ambiente). -->
+<html lang="pt-BR" data-tema="{{genero}}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{titulo}} · {{dataCurta}}</title>
+  <meta name="description" content="Venha celebrar a chegada {{artigo}} {{nossa}} {{realeza}} {{nome}}. {{dataTexto}}. {{emoji}}" />
+
+  <!-- Open Graph (preview bonito ao compartilhar no WhatsApp) -->
+  <meta property="og:title" content="{{titulo}} {{emoji}}" />
+  <meta property="og:description" content="{{dataTexto}}. Será uma alegria contar com a sua presença!" />
+  <meta property="og:image" content="{{ogImagem}}" />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>{{emoji}}</text></svg>" />
+
+  <!-- Console na tela para depurar no celular: acesse a URL com ?debug=1 -->
+  <script>
+    (function () {
+      if (!/[?&]debug/.test(location.search)) return;
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/eruda@3.4.1";
+      s.onload = function () { window.eruda && eruda.init(); };
+      document.head.appendChild(s);
+    })();
+    window.addEventListener("error", function (e) {
+      console.error("Erro:", e.message, "em", e.filename + ":" + e.lineno);
+    });
+    window.addEventListener("unhandledrejection", function (e) {
+      console.error("Promise rejeitada:", e.reason && (e.reason.message || e.reason));
+    });
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Great+Vibes&family=Noto+Serif:ital,wght@0,400;0,700;1,700&family=Parisienne&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./assets/styles.css?v={{versao}}" />
+</head>
+<body>
+  <!-- Fundo animado (céu de berçário para menino, listras com laçinhos para menina) -->
+  <div class="fundo" aria-hidden="true">
+    {{{fundoHtml}}}
+  </div>
+
+  <main class="card" id="card">
+
+    <!-- Ilustração de capa -->
+    <!-- Folha 1: capa, título, versículo e data -->
+    <div class="folha folha-topo">
+    <div class="capa reveal" style="--d:0">
+      <img class="capa-img" src="./{{capaSrc}}" alt="{{capaAlt}}" data-parallax="12" loading="eager" />
+      {{#ehMenina}}
+      <img class="lacinho lacinho-esq" src="./assets/temas/menina/lacinho-esq.png" alt="" aria-hidden="true" />
+      <img class="lacinho lacinho-dir" src="./assets/temas/menina/lacinho-dir.png" alt="" aria-hidden="true" />
+      {{/ehMenina}}
+    </div>
+
+    <!-- Cabeçalho do convite -->
+    <header class="hero reveal" style="--d:1">
+      <h1 class="title"><span class="title-cha">Chá {{artigo}}</span> <span class="name">{{nome}}</span></h1>
+
+      {{#versiculoTexto}}
+      <blockquote class="verse">
+        <p>“{{versiculoTexto}}”</p>
+        <cite>{{versiculoRef}}</cite>
+      </blockquote>
+      {{/versiculoTexto}}
+
+      <div class="date-block" aria-label="{{dataTexto}}">
+        <span class="db-month">{{mesAbrev}}</span>
+        <div class="db-row">
+          <span class="db-side">{{diaSemanaCaixa}}</span>
+          <span class="db-day">{{dia}}</span>
+          <span class="db-side">ÀS {{horaRelogio}}</span>
+        </div>
+      </div>
+    </header>
+    </div>
+
+    <!-- Folha 2: local e sugestão de presente -->
+    <div class="folha">
+    <div class="hero hero-info reveal" style="--d:1">
+      <p class="where">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+        <span>{{localEndereco}}, {{localNome}}</span>
+      </p>
+
+      {{#presenteItem}}
+      <p class="gift">
+        Sugestão de presente: <em>{{presenteItem}}</em> <span class="gift-brands">({{presenteMarcas}})</span>{{#presenteExtra}} + <em>{{presenteExtra}}</em>{{/presenteExtra}}
+      </p>
+      {{/presenteItem}}
+    </div>
+    </div>
+
+    <!-- Folha 3: contador, mensagem e mascote -->
+    <div class="folha">
+
+    <!-- Contador regressivo -->
+    <section class="countdown-wrap reveal" style="--d:2" aria-labelledby="countdown-title">
+      <h2 class="countdown-title" id="countdown-title">Falta pouquinho para o grande dia {{emoji}}</h2>
+      <div class="countdown" id="countdown" role="timer" aria-live="off">
+        <div class="cd-box"><span class="cd-num" data-unit="dias">--</span><span class="cd-label">dias</span></div>
+        <span class="cd-sep" aria-hidden="true">:</span>
+        <div class="cd-box"><span class="cd-num" data-unit="horas">--</span><span class="cd-label">horas</span></div>
+        <span class="cd-sep" aria-hidden="true">:</span>
+        <div class="cd-box"><span class="cd-num" data-unit="minutos">--</span><span class="cd-label">min</span></div>
+        <span class="cd-sep" aria-hidden="true">:</span>
+        <div class="cd-box"><span class="cd-num" data-unit="segundos">--</span><span class="cd-label">seg</span></div>
+      </div>
+      <p class="countdown-note" id="countdown-note" hidden></p>
+    </section>
+
+    <!-- Mensagem -->
+    <section class="message reveal" style="--d:3">
+      <p>Será uma alegria ter você conosco para celebrar a chegada {{artigo}} {{nossa}} {{realeza}}. Esperamos por você!</p>
+    </section>
+
+    {{{mascoteHtml}}}
+
+    </div>
+
+    <!-- Folha 4: confirmação de presença (sempre visível) e abas -->
+    <div class="folha">
+    <!-- Confirmação de presença (sempre visível, antes das abas) -->
+    <section class="confirmar-box reveal" style="--d:4" id="confirmar" aria-labelledby="confirmar-title">
+      <h2 class="confirmar-title" id="confirmar-title">Confirme sua presença</h2>
+
+      <div class="rsvp" id="rsvp">
+        <p class="rsvp-sub">Digite seu nome para confirmar — vamos guardar um lugarzinho especial para você. {{coracao}}</p>
+
+        <form id="rsvp-form" novalidate>
+          <div class="field">
+            <input type="text" id="nome" name="nome" placeholder=" " autocomplete="name" maxlength="80" required />
+            <label for="nome">Seu nome completo</label>
+          </div>
+          <button type="submit" id="submit-btn">
+            <span class="btn-label">Confirmar presença</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+          <p class="form-error" id="form-error" role="alert"></p>
+        </form>
+      </div>
+
+      <!-- Estado de sucesso (escondido até confirmar) -->
+      <div class="success" id="success" hidden>
+        <div class="bear">{{emoji}}</div>
+        <h3>Presença confirmada!</h3>
+        <p id="success-name">Obrigado por confirmar.</p>
+        <p class="success-note">Mal podemos esperar para celebrar a chegada {{artigo}} {{nome}} com você. Até <strong>{{dataLonga}}, às {{hora}}</strong>! {{coracao}}</p>
+      </div>
+    </section>
+
+    <!-- Abas que expandem no lugar (mimos e endereço) -->
+    <div class="accordion reveal" style="--d:5">
+
+      <!-- Sugestão de mimos -->
+      <section class="acc-item" data-scroll="start">
+        <h2 class="acc-heading">
+          <button type="button" class="acc-trigger" id="tab-mimos" aria-expanded="false" aria-controls="mimos">
+            <span class="acc-text">
+              <strong>Lista de sugestões</strong>
+              <small>Veja a listinha {{artigo}} {{nome}}</small>
+            </span>
+            <svg class="acc-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4 5.1 5.1 5.1-5.1L18.5 9z"/></svg>
+          </button>
+        </h2>
+        <div class="acc-panel" id="mimos" role="region" aria-labelledby="tab-mimos" hidden>
+          <div class="acc-inner">
+            <ul class="mimo-list">
+              {{{mimosHtml}}}
+            </ul>
+
+            {{#mimoExtra}}<p class="mimo-extra">{{mimoExtra}}</p>{{/mimoExtra}}
+
+            <div class="thanks-note">
+              <p>Seu carinho fará parte dos primeiros momentos {{artigo}}</p>
+              <p class="thanks-name">{{nome}} {{coracao}}</p>
+              <p>Obrigado!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Endereço do local -->
+      <section class="acc-item" data-scroll="center">
+        <h2 class="acc-heading">
+          <button type="button" class="acc-trigger" id="tab-local" aria-expanded="false" aria-controls="local">
+            <span class="acc-text">
+              <strong>Endereço do local</strong>
+              <small>{{localNome}} · {{localEndereco}}</small>
+            </span>
+            <svg class="acc-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4 5.1 5.1 5.1-5.1L18.5 9z"/></svg>
+          </button>
+        </h2>
+        <div class="acc-panel" id="local" role="region" aria-labelledby="tab-local" hidden>
+          <div class="acc-inner">
+            <div class="place">
+              <div class="place-row">
+                <span class="place-icon" aria-hidden="true">📍</span>
+                <div>
+                  <strong>{{localNome}}</strong>
+                  <p>{{localEndereco}}</p>
+                  {{#localReferencia}}<p class="place-ref">Ponto de referência: {{localReferencia}}</p>{{/localReferencia}}
+                </div>
+              </div>
+
+              <div class="place-row">
+                <span class="place-icon" aria-hidden="true">📅</span>
+                <div>
+                  <strong>{{dataLonga}}</strong>
+                  <p>às {{hora}}</p>
+                </div>
+              </div>
+            </div>
+
+            <a class="map-btn" href="{{localMapa}}" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+              Abrir no Google Maps
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    </div>
+  </main>
+
+  <p class="signature">Feito com carinho para {{artDef}} {{nossa}} {{nome}} {{coracao}}</p>
+
+  <!-- símbolos que sobem ao confirmar -->
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <script src="./assets/config.js?v={{versao}}"></script>
+  <script src="./assets/event.js?v={{versao}}"></script>
+  <script src="./assets/app.js?v={{versao}}"></script>
+</body>
+</html>
